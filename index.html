@@ -9,9 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
 <style>
-/* ============================================================
-   RESET + TOKENS
-   ============================================================ */
+// tokens
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
 
@@ -115,15 +113,62 @@ nav.scrolled { border-bottom-color: var(--rule); }
 }
 .nav-resume:hover { background: var(--red); color: var(--white) !important; }
 
-/* ============================================================
-   HERO
-   ============================================================ */
+/* hero section */
 #hero {
   min-height: 100svh;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 4rem;
+  padding: 8rem 3rem 4rem;
+}
+
+.hero-left {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 8rem 3rem 4rem;
+}
+
+.hero-right {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 0.25rem;
+  flex-shrink: 0;
+}
+
+.hero-photo {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--rule);
+  background: var(--white);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.hero-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* placeholder shown when no image is set */
+.hero-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  border-radius: 50%;
+}
+.hero-photo-placeholder svg {
+  width: 60%;
+  height: 60%;
+  opacity: 0.18;
 }
 
 .hero-eyebrow {
@@ -610,6 +655,11 @@ footer {
   .about-grid { grid-template-columns: 1fr; gap: 3rem; }
   .skills-aside { position: static; }
 
+  /* stack hero on mobile */
+  #hero { grid-template-columns: 1fr; gap: 2.5rem; }
+  .hero-right { justify-content: center; padding-bottom: 0; }
+  .hero-photo { width: 160px; height: 160px; }
+
   footer { padding: 1.5rem; flex-direction: column; align-items: flex-start; gap: 0.4rem; }
 }
 
@@ -653,23 +703,42 @@ footer {
      HERO
 ═══════════════════════════════════════ -->
 <section id="hero" aria-label="Introduction">
-  <p class="hero-eyebrow">CS + Statistics · Augsburg University · Dec 2026</p>
+  <div class="hero-left">
+    <p class="hero-eyebrow">CS + Statistics · Augsburg University · Dec 2026</p>
 
-  <h1 class="hero-name">
-    bruk<br>kassie<span class="accent">.</span>
-  </h1>
+    <h1 class="hero-name">
+      bruk<br>kassie<span class="accent">.</span>
+    </h1>
 
-  <p class="hero-desc">
-    I build things at the intersection of <strong>machine learning, statistics,
-    and production infrastructure,</strong> from physics-informed neural networks
-    on atmospheric data to cloud infra at a Federal Reserve Bank.
-  </p>
+    <p class="hero-desc">
+      I build things at the intersection of <strong>machine learning, statistics,
+      and production infrastructure.</strong> From physics-informed neural networks
+      on atmospheric data to cloud infra at a Federal Reserve Bank.
+    </p>
 
-  <div class="hero-bottom">
+    <div class="hero-bottom">
 
-    <a href="#work" class="hero-scroll" aria-label="Scroll to work section">
-      See the work <span aria-hidden="true">↓</span>
-    </a>
+      <a href="#work" class="hero-scroll" aria-label="Scroll to work section">
+        See the work <span aria-hidden="true">↓</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-photo">
+      <!--
+        Replace the placeholder below with your actual photo:
+
+        The image will be cropped to a circle automatically.
+        For best results use a square photo cropped to your face/shoulders.
+      -->
+        <img src="IMG_2519.JPG" alt="Bruk Kassie" />
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="8" r="4" stroke="#141210" stroke-width="1.5"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#141210" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1047,10 +1116,10 @@ footer {
     Let's<br>talk<span class="accent">.</span>
   </h2>
   <div class="contact-links reveal" role="list">
-    <a href="mailto:kassieb@augsburg.edu" class="clink" role="listitem" aria-label="Send email to me!">
+    <a href="/cdn-cgi/l/email-protection#204b4153534945426041554753425552470e454455" class="clink" role="listitem" aria-label="Send email to me!">
       <div>
         <p class="clink-label">Email</p>
-        <p class="clink-val">kassieb@augsburg.edu</p>
+        <p class="clink-val"><span class="__cf_email__" data-cfemail="ee858f9d9d878b8cae8f9b899d8c9b9c89c08b8a9b">[email&#160;protected]</span></p>
       </div>
       <span class="clink-arr" aria-hidden="true">→</span>
     </a>
@@ -1090,7 +1159,7 @@ footer {
   <p class="footer-loc">Minneapolis, MN</p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   /* ── Nav scrolled state ──────────────────── */
   const nav = document.getElementById('nav');
   const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
@@ -1112,13 +1181,3 @@ footer {
     '.projects-list, .exp-grid, .about-qa, .skills-aside'
   );
   staggerParents.forEach(parent => {
-    const children = parent.querySelectorAll(':scope > .reveal');
-    children.forEach((child, i) => {
-      child.style.transitionDelay = `${i * 70}ms`;
-    });
-  });
-
-  revealEls.forEach(el => observer.observe(el));
-</script>
-</body>
-</html>
