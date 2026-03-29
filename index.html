@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Name — CS + Statistics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   RESET + TOKENS
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+:root {
+  --cream:   #f5f2eb;
+  --white:   #fdfcf9;
+  --ink:     #141210;
+  --ink2:    #3d3a36;
+  --muted:   #888078;
+  --rule:    #dbd8d0;
+  --red:     #d63c1a;
+  --red-dim: rgba(214,60,26,0.08);
+  --sans:    'Instrument Sans', system-ui, sans-serif;
+  --display: 'Syne', system-ui, sans-serif;
+  --mono:    'JetBrains Mono', 'Courier New', monospace;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── SKIP LINK ─────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  border-radius: 2px;
+  z-index: 9999;
+  transition: top 0.2s;
+  text-decoration: none;
+}
+.skip-link:focus { top: 1rem; }
+
+/* ── FOCUS ─────────────────────────────────────── */
+:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 3rem;
+  background: rgba(245,242,235,0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+nav.scrolled { border-bottom-color: var(--rule); }
+
+.nav-logo {
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--red); }
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  align-items: center;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+.nav-resume {
+  color: var(--red) !important;
+  padding: 0.4rem 0.9rem;
+  border: 1.5px solid var(--red);
+  border-radius: 2px;
+  transition: background 0.2s, color 0.2s !important;
+}
+.nav-resume:hover { background: var(--red); color: var(--white) !important; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+#hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 8rem 3rem 4rem;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: up 0.7s ease 0.1s forwards;
+}
+
+.hero-name {
+  font-family: var(--display);
+  font-size: clamp(4.5rem, 12vw, 10rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: up 0.7s ease 0.25s forwards;
+}
+.hero-name .accent { color: var(--red); }
+
+.hero-desc {
+  max-width: 560px;
+  font-size: 1.15rem;
+  color: var(--ink2);
+  line-height: 1.65;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: up 0.7s ease 0.4s forwards;
+}
+.hero-desc strong { color: var(--ink); font-weight: 500; }
+
+.hero-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: up 0.7s ease 0.55s forwards;
+}
+
+.hero-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.htag {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: 100px;
+  background: var(--white);
+}
+
+.hero-scroll {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--red);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: gap 0.25s;
+  white-space: nowrap;
+}
+.hero-scroll:hover { gap: 0.9rem; }
+
+/* Ticker */
+.ticker-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--ink);
+  padding: 0.75rem 0;
+  white-space: nowrap;
+}
+.ticker-track {
+  display: inline-flex;
+  gap: 3rem;
+  animation: ticker 24s linear infinite;
+}
+.ticker-wrap:hover .ticker-track { animation-play-state: paused; }
+.ticker-item {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: rgba(245,242,235,0.6);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.ticker-item .sep { color: var(--red); margin: 0 0.75rem; }
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+section:not(#hero) { padding: 6rem 3rem; }
+
+.s-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 3.5rem;
+}
+.s-num {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--red);
+  letter-spacing: 0.15em;
+}
+.s-title {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.s-rule { flex: 1; height: 1px; background: var(--rule); }
+
+/* ============================================================
+   PROJECTS
+   ============================================================ */
+#work { border-top: 1px solid var(--rule); }
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border: 1px solid var(--rule);
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  background: var(--white);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+.project-row[href] { cursor: pointer; }
+
+.project-arr {
+  position: absolute;
+  right: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%) translateX(12px);
+  font-size: 1.1rem;
+  color: var(--red);
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.25s;
+  pointer-events: none;
+}
+.project-row[href]:hover { background: var(--cream); }
+.project-row[href]:hover .project-arr { opacity: 1; transform: translateY(-50%) translateX(0); }
+
+.project-row.featured { grid-template-columns: 1fr; }
+
+.project-visual {
+  overflow: hidden;
+  flex-shrink: 0;
+  line-height: 0;
+}
+.project-visual svg { width: 100%; height: 100%; display: block; }
+.project-row:not(.featured) .project-visual { aspect-ratio: 4/3; }
+.project-row.featured .project-visual { aspect-ratio: 21/7; }
+
+.project-info {
+  padding: 2.5rem 3rem 2.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.project-row.featured .project-info {
+  padding: 2.5rem 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.project-meta {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.project-star { color: var(--red); }
+
+.project-title {
+  font-family: var(--display);
+  font-size: clamp(1.2rem, 2.2vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+.project-row.featured .project-title { font-size: clamp(1.4rem, 2.5vw, 2rem); }
+
+.project-desc {
+  font-size: 0.9rem;
+  color: var(--ink2);
+  line-height: 1.72;
+}
+
+.project-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+.pstack {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+
+/* ============================================================
+   EXPERIENCE
+   ============================================================ */
+#experience { background: var(--ink); }
+#experience .s-title { color: var(--cream); }
+#experience .s-num { color: var(--red); }
+#experience .s-rule { background: rgba(245,242,235,0.12); }
+
+.exp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(245,242,235,0.08);
+  border: 1px solid rgba(245,242,235,0.08);
+}
+
+.exp-card {
+  background: var(--ink);
+  padding: 2.5rem;
+  transition: background 0.25s;
+}
+.exp-card:hover { background: #1e1c18; }
+
+.exp-period {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--red);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.exp-org {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: rgba(245,242,235,0.4);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.3rem;
+}
+.exp-role {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+.exp-desc {
+  font-size: 0.88rem;
+  color: rgba(245,242,235,0.55);
+  line-height: 1.72;
+  margin-bottom: 1.5rem;
+}
+.exp-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; }
+.epill {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  color: rgba(245,242,235,0.4);
+  padding: 0.2rem 0.55rem;
+  border: 1px solid rgba(245,242,235,0.1);
+  border-radius: 2px;
+}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+#about { border-top: 1px solid var(--rule); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.about-qa { display: flex; flex-direction: column; gap: 2.5rem; }
+
+.qa-block h3 {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--red);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.qa-block p {
+  font-size: 1.05rem;
+  color: var(--ink2);
+  line-height: 1.75;
+}
+.qa-block p strong { color: var(--ink); font-weight: 500; }
+.qa-block p em { color: var(--red); font-style: normal; }
+
+.skills-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: 6rem;
+}
+
+.skill-block {
+  border: 1px solid var(--rule);
+  padding: 1.4rem 1.5rem;
+  background: var(--white);
+  border-radius: 3px;
+}
+.skill-block-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.stag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink2);
+  padding: 0.22rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 100px;
+  background: var(--cream);
+}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+#contact {
+  border-top: 1px solid var(--rule);
+  min-height: 55vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contact-head {
+  font-family: var(--display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin-bottom: 3rem;
+}
+.contact-head .accent { color: var(--red); }
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+  max-width: 740px;
+}
+.clink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--white);
+  transition: background 0.2s, color 0.2s;
+  min-width: 180px;
+  flex: 1;
+}
+.clink:hover { background: var(--ink); color: var(--cream); }
+.clink-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+  transition: color 0.2s;
+}
+.clink:hover .clink-label { color: rgba(245,242,235,0.4); }
+.clink-val { font-size: 0.9rem; font-weight: 500; }
+.clink-arr {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--red);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 1.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.footer-copy, .footer-loc {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* ============================================================
+   REVEAL
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.in { opacity: 1; transform: none; }
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 820px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { gap: 1rem; }
+  .nav-links li.hide-sm { display: none; }
+
+  #hero { padding: 7rem 1.5rem 3rem; }
+  section:not(#hero) { padding: 4rem 1.5rem; }
+
+  .project-row { grid-template-columns: 1fr; }
+  .project-row:not(.featured) .project-visual { aspect-ratio: 16/7; }
+  .project-row.featured .project-info { grid-template-columns: 1fr; }
+  .project-arr { display: none; }
+
+  .exp-grid { grid-template-columns: 1fr; }
+
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .skills-aside { position: static; }
+
+  footer { padding: 1.5rem; flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+}
+
+@media (max-width: 480px) {
+  .hero-name { font-size: clamp(3.2rem, 16vw, 5rem); }
+  .project-info { padding: 1.5rem; }
+  .project-row.featured .project-info { padding: 1.5rem; }
+}
+
+/* ── Reduced motion ────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .ticker-track { animation: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- ═══════════════════════════════════════
+     NAV
+═══════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <a href="#hero" class="nav-logo" aria-label="Back to top">YN<span>.</span></a>
+  <ul class="nav-links">
+    <li class="hide-sm"><a href="#work">Work</a></li>
+    <li class="hide-sm"><a href="#experience">Experience</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact" class="nav-resume">Contact</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<section id="hero" aria-label="Introduction">
+  <p class="hero-eyebrow">CS + Statistics · Augsburg University · Dec 2026</p>
+
+  <h1 class="hero-name">
+    Your<br>Name<span class="accent">.</span>
+  </h1>
+
+  <p class="hero-desc">
+    I build things at the intersection of <strong>machine learning, statistics,
+    and production infrastructure</strong> — from physics-informed neural networks
+    on atmospheric data to cloud infra at a Federal Reserve Bank.
+  </p>
+
+  <div class="hero-bottom">
+    <div class="hero-tags" role="list" aria-label="Key skills">
+      <span class="htag" role="listitem">Python</span>
+      <span class="htag" role="listitem">R</span>
+      <span class="htag" role="listitem">PyTorch</span>
+      <span class="htag" role="listitem">Terraform</span>
+      <span class="htag" role="listitem">Time Series</span>
+      <span class="htag" role="listitem">Statistical Modeling</span>
+    </div>
+    <a href="#work" class="hero-scroll" aria-label="Scroll to work section">
+      See the work <span aria-hidden="true">↓</span>
+    </a>
+  </div>
+</section>
+
+<!-- ticker strip -->
+<div class="ticker-wrap" aria-hidden="true" role="presentation">
+  <div class="ticker-track">
+    <span class="ticker-item">Physics-Informed ML<span class="sep">✦</span></span>
+    <span class="ticker-item">Reservoir Computing<span class="sep">✦</span></span>
+    <span class="ticker-item">Federal Reserve Bank<span class="sep">✦</span></span>
+    <span class="ticker-item">NASA MERRA-2<span class="sep">✦</span></span>
+    <span class="ticker-item">DevOps + IaC<span class="sep">✦</span></span>
+    <span class="ticker-item">Statistical Modeling<span class="sep">✦</span></span>
+    <span class="ticker-item">Echo State Networks<span class="sep">✦</span></span>
+    <span class="ticker-item">Python · PyTorch · Java<span class="sep">✦</span></span>
+    <span class="ticker-item">Physics-Informed ML<span class="sep">✦</span></span>
+    <span class="ticker-item">Reservoir Computing<span class="sep">✦</span></span>
+    <span class="ticker-item">Federal Reserve Bank<span class="sep">✦</span></span>
+    <span class="ticker-item">NASA MERRA-2<span class="sep">✦</span></span>
+    <span class="ticker-item">DevOps + IaC<span class="sep">✦</span></span>
+    <span class="ticker-item">Statistical Modeling<span class="sep">✦</span></span>
+    <span class="ticker-item">Echo State Networks<span class="sep">✦</span></span>
+    <span class="ticker-item">Python · PyTorch · Java<span class="sep">✦</span></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     WORK
+═══════════════════════════════════════ -->
+<section id="work" aria-labelledby="work-heading">
+  <div class="s-header reveal">
+    <span class="s-num" aria-hidden="true">01</span>
+    <h2 class="s-title" id="work-heading">Work</h2>
+    <div class="s-rule" role="presentation"></div>
+  </div>
+
+  <div class="projects-list">
+
+    <!-- ── Featured: PI-ESN ── -->
+    <article class="project-row featured reveal" aria-label="Project: Physics-Informed Echo State Networks">
+      <div class="project-visual" aria-hidden="true">
+        <svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="bg1a" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#07253d"/>
+              <stop offset="100%" stop-color="#0b3d57"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="360" fill="url(#bg1a)"/>
+          <!-- wave bands: atmospheric layers -->
+          <g stroke-width="1.5" fill="none" opacity="0.22" stroke="#7dd3fc">
+            <path d="M0,180 C150,130 300,230 450,180 S750,130 900,180 S1100,230 1200,180"/>
+            <path d="M0,200 C130,155 260,250 390,200 S650,155 780,200 S1030,250 1200,200" opacity="0.8"/>
+            <path d="M0,160 C170,115 340,210 510,160 S850,115 1020,160 S1150,210 1200,160" opacity="0.6"/>
+            <path d="M0,220 C120,175 240,270 360,220 S600,175 720,220 S960,270 1200,220" opacity="0.5"/>
+            <path d="M0,140 C190,100 380,190 570,140 S950,100 1140,140" opacity="0.35"/>
+          </g>
+          <!-- reservoir nodes -->
+          <g stroke="rgba(125,211,252,0.5)" stroke-width="1" fill="none">
+            <line x1="220" y1="100" x2="380" y2="70"/>
+            <line x1="380" y1="70" x2="540" y2="110"/>
+            <line x1="540" y1="110" x2="700" y2="80"/>
+            <line x1="700" y1="80" x2="860" y2="115"/>
+            <line x1="860" y1="115" x2="1020" y2="85"/>
+            <line x1="220" y1="100" x2="540" y2="110" opacity="0.3"/>
+            <line x1="380" y1="70" x2="700" y2="80" opacity="0.2"/>
+          </g>
+          <g fill="rgba(125,211,252,0.65)">
+            <circle cx="220" cy="100" r="5"/>
+            <circle cx="380" cy="70" r="4"/>
+            <circle cx="540" cy="110" r="6"/>
+            <circle cx="700" cy="80" r="4.5"/>
+            <circle cx="860" cy="115" r="5"/>
+            <circle cx="1020" cy="85" r="4"/>
+          </g>
+          <!-- physics symbol -->
+          <text x="60" y="310" font-family="Georgia,serif" font-size="13" fill="rgba(125,211,252,0.3)" letter-spacing="3">∂u/∂t + u·∇u = −∇p + ν∇²u</text>
+          <text x="60" y="340" font-family="JetBrains Mono,monospace" font-size="10" fill="rgba(125,211,252,0.2)" letter-spacing="3">MERRA-2 · PHYSICS LOSS · ECHO STATE NETWORK</text>
+        </svg>
+      </div>
+      <div class="project-info">
+        <div>
+          <p class="project-meta">
+            <span class="project-star" aria-label="Featured project">★</span>
+            Research · Physics-Informed ML
+          </p>
+          <h3 class="project-title">Physics-Informed Echo State Networks for Atmospheric Simulation</h3>
+          <p class="project-desc">Surrogate modeling framework using reservoir computing with embedded physics loss constraints. Trained on NASA MERRA-2 reanalysis data — the goal is to approximate atmospheric dynamics at a fraction of full-simulator cost. ESNs are memory-efficient for time series; physics constraints improve generalization.</p>
+        </div>
+        <div class="project-stack" role="list" aria-label="Technologies used">
+          <span class="pstack" role="listitem">PyTorch</span>
+          <span class="pstack" role="listitem">Echo State Networks</span>
+          <span class="pstack" role="listitem">NASA MERRA-2</span>
+          <span class="pstack" role="listitem">Physics Loss</span>
+          <span class="pstack" role="listitem">Python</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Row: Statistical Modeling ── -->
+    <article class="project-row reveal" aria-label="Project: Statistical Analysis Pipeline">
+      <div class="project-visual" aria-hidden="true">
+        <svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="500" height="380" fill="#fef7ef"/>
+          <!-- axes -->
+          <line x1="60" y1="310" x2="460" y2="310" stroke="#c8793a" stroke-width="1.5" opacity="0.35"/>
+          <line x1="60" y1="50" x2="60" y2="310" stroke="#c8793a" stroke-width="1.5" opacity="0.35"/>
+          <!-- regression line -->
+          <line x1="70" y1="295" x2="450" y2="85" stroke="#c8793a" stroke-width="2.5" opacity="0.7"/>
+          <!-- scatter points -->
+          <g fill="#c8793a" opacity="0.55">
+            <circle cx="90" cy="280" r="4.5"/><circle cx="130" cy="260" r="4"/><circle cx="165" cy="245" r="5"/>
+            <circle cx="200" cy="230" r="4"/><circle cx="230" cy="210" r="4.5"/><circle cx="265" cy="195" r="4"/>
+            <circle cx="300" cy="185" r="5"/><circle cx="335" cy="162" r="4"/><circle cx="370" cy="148" r="4.5"/>
+            <circle cx="405" cy="130" r="4"/><circle cx="435" cy="115" r="5"/>
+            <circle cx="110" cy="272" r="3.5"/><circle cx="185" cy="238" r="3"/><circle cx="248" cy="202" r="3.5"/>
+            <circle cx="315" cy="175" r="3"/><circle cx="387" cy="140" r="3.5"/>
+          </g>
+          <!-- axis labels -->
+          <text x="250" y="340" font-family="Georgia,serif" font-size="11" fill="#a05a28" opacity="0.55" text-anchor="middle">x (predictor)</text>
+          <text x="24" y="185" font-family="Georgia,serif" font-size="11" fill="#a05a28" opacity="0.55" text-anchor="middle" transform="rotate(-90,24,185)">y (response)</text>
+          <!-- R² note -->
+          <text x="380" y="295" font-family="JetBrains Mono,monospace" font-size="11" fill="#c8793a" opacity="0.5">R² = 0.91</text>
+        </svg>
+      </div>
+      <div class="project-info">
+        <div>
+          <p class="project-meta">Statistical Modeling · R</p>
+          <h3 class="project-title">Statistical Analysis Pipeline</h3>
+          <p class="project-desc">End-to-end modeling workflows in R — EDA, assumption diagnostics, model fitting, and result reporting. Covers linear regression, logistic regression, ANOVA, and ANCOVA, with visualizations in ggplot2.</p>
+        </div>
+        <div class="project-stack" role="list" aria-label="Technologies used">
+          <span class="pstack" role="listitem">R</span>
+          <span class="pstack" role="listitem">ggplot2</span>
+          <span class="pstack" role="listitem">ANOVA / ANCOVA</span>
+          <span class="pstack" role="listitem">Logistic Regression</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Row: Cloud Infra ── -->
+    <article class="project-row reveal" aria-label="Project: Cloud Infrastructure Automation">
+      <div class="project-visual" aria-hidden="true">
+        <svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="500" height="380" fill="#111827"/>
+          <!-- IaC node diagram -->
+          <g fill="none" stroke="rgba(96,165,250,0.3)" stroke-width="1.5">
+            <rect x="185" y="55" width="130" height="52" rx="4"/>
+            <rect x="60" y="170" width="110" height="48" rx="4"/>
+            <rect x="195" y="170" width="110" height="48" rx="4"/>
+            <rect x="330" y="170" width="110" height="48" rx="4"/>
+            <line x1="250" y1="107" x2="115" y2="170"/>
+            <line x1="250" y1="107" x2="250" y2="170"/>
+            <line x1="250" y1="107" x2="385" y2="170"/>
+          </g>
+          <!-- code snippet -->
+          <text x="200" y="77" font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(96,165,250,0.7)" text-anchor="middle">resource</text>
+          <text x="200" y="92" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(96,165,250,0.55)" text-anchor="middle">Terraform</text>
+          <text x="115" y="199" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(96,165,250,0.55)" text-anchor="middle">EC2</text>
+          <text x="250" y="199" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(96,165,250,0.55)" text-anchor="middle">S3</text>
+          <text x="385" y="199" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(96,165,250,0.55)" text-anchor="middle">IAM</text>
+          <!-- code lines -->
+          <g font-family="JetBrains Mono,monospace" font-size="9" fill="rgba(96,165,250,0.18)">
+            <text x="45" y="270">resource "aws_instance" "api" {</text>
+            <text x="60" y="286">  ami  = data.aws_ami.ubuntu.id</text>
+            <text x="60" y="302">  type = var.instance_type</text>
+            <text x="45" y="318">}</text>
+          </g>
+        </svg>
+      </div>
+      <div class="project-info">
+        <div>
+          <p class="project-meta">Infrastructure · DevOps</p>
+          <h3 class="project-title">Cloud Infrastructure Automation</h3>
+          <p class="project-desc">Production IaC and automation tooling from the Federal Reserve internship. Terraform modules for cloud provisioning, Python scripting for compliance workflows, and CI/CD-integrated deployments in a regulated environment.</p>
+        </div>
+        <div class="project-stack" role="list" aria-label="Technologies used">
+          <span class="pstack" role="listitem">Terraform</span>
+          <span class="pstack" role="listitem">Python</span>
+          <span class="pstack" role="listitem">AWS</span>
+          <span class="pstack" role="listitem">CI/CD</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── Row: DSA ── -->
+    <article class="project-row reveal" aria-label="Project: Data Structures from Scratch">
+      <div class="project-visual" aria-hidden="true">
+        <svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="500" height="380" fill="#f2f5ec"/>
+          <!-- BST -->
+          <g fill="none" stroke="#4a7c40" stroke-width="1.5" opacity="0.45">
+            <line x1="250" y1="75" x2="155" y2="145"/>
+            <line x1="250" y1="75" x2="345" y2="145"/>
+            <line x1="155" y1="145" x2="100" y2="215"/>
+            <line x1="155" y1="145" x2="210" y2="215"/>
+            <line x1="345" y1="145" x2="290" y2="215"/>
+            <line x1="345" y1="145" x2="400" y2="215"/>
+            <line x1="100" y1="215" x2="72" y2="278"/>
+            <line x1="100" y1="215" x2="128" y2="278"/>
+          </g>
+          <g fill="#4a7c40" opacity="0.75">
+            <circle cx="250" cy="75" r="20"/><circle cx="155" cy="145" r="17"/>
+            <circle cx="345" cy="145" r="17"/><circle cx="100" cy="215" r="15"/>
+            <circle cx="210" cy="215" r="15"/><circle cx="290" cy="215" r="15"/>
+            <circle cx="400" cy="215" r="15"/><circle cx="72" cy="278" r="12"/>
+            <circle cx="128" cy="278" r="12"/>
+          </g>
+          <g fill="white" font-family="JetBrains Mono,monospace" font-size="11" text-anchor="middle" font-weight="500">
+            <text x="250" y="79">42</text><text x="155" y="149">18</text>
+            <text x="345" y="149">67</text><text x="100" y="219">9</text>
+            <text x="210" y="219">25</text><text x="290" y="219">55</text>
+            <text x="400" y="219">80</text>
+          </g>
+          <text x="250" y="340" font-family="JetBrains Mono,monospace" font-size="10" fill="#4a7c40" opacity="0.4" text-anchor="middle">Binary Search Tree — O(log n)</text>
+        </svg>
+      </div>
+      <div class="project-info">
+        <div>
+          <p class="project-meta">Data Structures · Java</p>
+          <h3 class="project-title">DSA Implementations from Scratch</h3>
+          <p class="project-desc">From-scratch implementations of BSTs, hash tables, linked lists, stacks, and queues in Java. The point isn't just making it work — it's understanding the runtime guarantees, memory layout, and design tradeoffs behind each structure.</p>
+        </div>
+        <div class="project-stack" role="list" aria-label="Technologies used">
+          <span class="pstack" role="listitem">Java</span>
+          <span class="pstack" role="listitem">BST</span>
+          <span class="pstack" role="listitem">Hash Tables</span>
+          <span class="pstack" role="listitem">OOP</span>
+        </div>
+      </div>
+    </article>
+
+  </div><!-- /projects-list -->
+</section>
+
+<!-- ═══════════════════════════════════════
+     EXPERIENCE
+═══════════════════════════════════════ -->
+<section id="experience" aria-labelledby="exp-heading">
+  <div class="s-header reveal">
+    <span class="s-num" aria-hidden="true">02</span>
+    <h2 class="s-title" id="exp-heading">Experience</h2>
+    <div class="s-rule" role="presentation"></div>
+  </div>
+
+  <div class="exp-grid">
+    <article class="exp-card reveal" aria-label="Federal Reserve Bank internship">
+      <p class="exp-period">2024 – 2025</p>
+      <p class="exp-org">Federal Reserve Bank</p>
+      <h3 class="exp-role">DevOps &amp; Infrastructure Intern</h3>
+      <p class="exp-desc">
+        Production DevOps at a Federal Reserve Bank. Provisioned and maintained
+        cloud infrastructure using Terraform, built Python automation tooling,
+        and worked within compliance-driven CI/CD workflows. Rare production
+        exposure as an undergraduate.
+      </p>
+      <ul class="exp-pills" role="list" aria-label="Technologies">
+        <li class="epill">Python</li>
+        <li class="epill">Terraform</li>
+        <li class="epill">Cloud Infra</li>
+        <li class="epill">CI/CD</li>
+        <li class="epill">IaC</li>
+      </ul>
+    </article>
+
+    <article class="exp-card reveal" aria-label="Undergraduate research">
+      <p class="exp-period">Ongoing</p>
+      <p class="exp-org">Augsburg University</p>
+      <h3 class="exp-role">Undergraduate Researcher</h3>
+      <p class="exp-desc">
+        Designing physics-informed Echo State Networks as efficient surrogates
+        for atmospheric simulation. Embedding conservation laws as soft loss
+        constraints, trained on NASA MERRA-2 reanalysis data — applying
+        reservoir computing theory to geophysical time series.
+      </p>
+      <ul class="exp-pills" role="list" aria-label="Technologies">
+        <li class="epill">PyTorch</li>
+        <li class="epill">Reservoir Computing</li>
+        <li class="epill">NASA MERRA-2</li>
+        <li class="epill">Physics-Informed ML</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════ -->
+<section id="about" aria-labelledby="about-heading">
+  <div class="s-header reveal">
+    <span class="s-num" aria-hidden="true">03</span>
+    <h2 class="s-title" id="about-heading">About</h2>
+    <div class="s-rule" role="presentation"></div>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-qa">
+
+      <div class="qa-block reveal">
+        <h3>Who this</h3>
+        <p>I'm a <strong>CS and Statistics double major</strong> at Augsburg University, graduating December 2026. Based in Minneapolis. I care about building things that are technically rigorous and actually useful — not just code that runs, but understanding why it runs the way it does.</p>
+      </div>
+
+      <div class="qa-block reveal">
+        <h3>What I build</h3>
+        <p>ML systems, data pipelines, and infrastructure. My experience runs the full arc: from <em>statistical modeling in R</em> and data structures in Java to shipping real cloud infrastructure at the Federal Reserve. I'm comfortable from notebook to deployment.</p>
+      </div>
+
+      <div class="qa-block reveal">
+        <h3>What's interesting</h3>
+        <p>Right now, <em>physics-informed Echo State Networks</em> — making atmospheric simulators cheaper by training reservoir computing models with built-in physical constraints on NASA climate data. ML meets geoscience meets math. I find the intersection genuinely exciting.</p>
+      </div>
+
+      <div class="qa-block reveal">
+        <h3>What's next</h3>
+        <p>Deepening PyTorch fluency, getting into MLOps (MLflow, W&amp;B, DVC), and building ML systems end-to-end — modeling, pipelines, deployment, reproducibility. Open to <strong>Summer 2026 internships</strong> and full-time roles from December 2026.</p>
+      </div>
+
+    </div>
+
+    <aside class="skills-aside" aria-label="Skills summary">
+      <div class="skill-block reveal">
+        <p class="skill-block-label">Languages</p>
+        <div class="skill-tags" role="list">
+          <span class="stag" role="listitem">Python</span>
+          <span class="stag" role="listitem">R</span>
+          <span class="stag" role="listitem">Java</span>
+          <span class="stag" role="listitem">SQL</span>
+          <span class="stag" role="listitem">Bash</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <p class="skill-block-label">ML / Data</p>
+        <div class="skill-tags" role="list">
+          <span class="stag" role="listitem">PyTorch</span>
+          <span class="stag" role="listitem">scikit-learn</span>
+          <span class="stag" role="listitem">NumPy</span>
+          <span class="stag" role="listitem">Pandas</span>
+          <span class="stag" role="listitem">ggplot2</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <p class="skill-block-label">Infrastructure</p>
+        <div class="skill-tags" role="list">
+          <span class="stag" role="listitem">Terraform</span>
+          <span class="stag" role="listitem">AWS</span>
+          <span class="stag" role="listitem">Docker</span>
+          <span class="stag" role="listitem">CI/CD</span>
+          <span class="stag" role="listitem">Git</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <p class="skill-block-label">Statistics</p>
+        <div class="skill-tags" role="list">
+          <span class="stag" role="listitem">Linear Regression</span>
+          <span class="stag" role="listitem">ANOVA / ANCOVA</span>
+          <span class="stag" role="listitem">Logistic Reg.</span>
+          <span class="stag" role="listitem">Time Series</span>
+        </div>
+      </div>
+      <div class="skill-block reveal">
+        <p class="skill-block-label">Education</p>
+        <div style="margin-top:0.15rem">
+          <p style="font-family:var(--display);font-size:1rem;font-weight:700;letter-spacing:-0.01em;color:var(--ink);margin-bottom:0.35rem;">Augsburg University</p>
+          <p style="font-family:var(--mono);font-size:0.7rem;color:var(--muted);line-height:1.6;">B.S. Computer Science<br>B.S. Statistics<br><span style="color:var(--red)">Dec 2026</span> · Minneapolis, MN</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════ -->
+<section id="contact" aria-labelledby="contact-heading">
+  <h2 class="contact-head reveal" id="contact-heading">
+    Let's<br>talk<span class="accent">.</span>
+  </h2>
+  <div class="contact-links reveal" role="list">
+    <a href="mailto:your@email.com" class="clink" role="listitem" aria-label="Send email to your@email.com">
+      <div>
+        <p class="clink-label">Email</p>
+        <p class="clink-val">your@email.com</p>
+      </div>
+      <span class="clink-arr" aria-hidden="true">→</span>
+    </a>
+    <a href="https://linkedin.com/in/yourhandle" target="_blank" rel="noopener noreferrer"
+       class="clink" role="listitem" aria-label="LinkedIn profile, opens in new tab">
+      <div>
+        <p class="clink-label">LinkedIn</p>
+        <p class="clink-val">/in/yourhandle</p>
+      </div>
+      <span class="clink-arr" aria-hidden="true">↗</span>
+    </a>
+    <a href="https://github.com/yourhandle" target="_blank" rel="noopener noreferrer"
+       class="clink" role="listitem" aria-label="GitHub profile, opens in new tab">
+      <div>
+        <p class="clink-label">GitHub</p>
+        <p class="clink-val">@yourhandle</p>
+      </div>
+      <span class="clink-arr" aria-hidden="true">↗</span>
+    </a>
+    <a href="resume.pdf" class="clink" role="listitem" aria-label="Download résumé as PDF">
+      <div>
+        <p class="clink-label">Résumé</p>
+        <p class="clink-val">Download PDF</p>
+      </div>
+      <span class="clink-arr" aria-hidden="true">↓</span>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer role="contentinfo">
+  <p class="footer-copy">© 2026 Your Name</p>
+  <p class="footer-loc">Minneapolis, MN · Available Dec 2026</p>
+</footer>
+
+<script>
+  /* ── Nav scrolled state ──────────────────── */
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ── Scroll reveal ───────────────────────── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+  // Stagger children within the same parent
+  const staggerParents = document.querySelectorAll(
+    '.projects-list, .exp-grid, .about-qa, .skills-aside'
+  );
+  staggerParents.forEach(parent => {
+    const children = parent.querySelectorAll(':scope > .reveal');
+    children.forEach((child, i) => {
+      child.style.transitionDelay = `${i * 70}ms`;
+    });
+  });
+
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
