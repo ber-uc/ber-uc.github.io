@@ -1177,7 +1177,17 @@ footer {
   }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
   // Stagger children within the same parent
-  const staggerParents = document.querySelectorAll(
-    '.projects-list, .exp-grid, .about-qa, .skills-aside'
-  );
-  staggerParents.forEach(parent => {}
+  const staggerParents = // REPLACE with this ↓
+document.querySelectorAll('.projects-list, .exp-grid, .about-qa, .skills-aside')
+  .forEach(parent => {
+    Array.from(parent.children)
+        .filter(el => el.classList.contains('reveal'))
+        .forEach((child, i) => {
+          child.style.transitionDelay = `${i * 70}ms`;
+        });
+    });
+
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
